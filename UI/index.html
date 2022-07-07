@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- This HTML document is a simple demo page to showcase using an HTML form to POST data to our API -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,7 +9,21 @@
 </head>
 
 <body>
+<!-- 
+    Down here we have the form. The action attribute is the location where the data should be sent.
+    The method attribute tells the browser what sort of HTTP request to make, and the target attribute 
+    tells the browser where to navigate to when the request is complete. 
 
+    In this case we are POSTing our form data to the /login endpoint and telling the browser not to
+    redirect us by saying the redirection target is "_blank"
+
+    Our form also has labels. It's important to consider how the user will interact with the client. 
+    We use the labels to direct the user to input valid info.
+
+    Lastly we have two buttons at the bottom. These are nested within the same <form> tag as the other
+    elements and will act on this form. Submit will transmit our data to the endpoint, and reset will clear
+    the input fields.
+ -->
     <h2>Form</h2>
     <hr>
     <form action="http://localhost:8080/simple-servlets/login" method="POST" target="_blank">

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- 
+    This HTML document is a simple demo page showcasing the use of fetch API to retrieve data from our API. 
+    (Note the double use of "API" in that last sentence. Lots of things are APIs, not just web servers.)
+  -->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,6 +15,7 @@
 <body id="body">
     <a href="www.google.com">google.com</a>
     <h2>User information: </h2>
+    <!-- You can invoke javascript functions by clicking a button, see below: -->
     <!-- <button type="button" onclick="showInfo()">Click here!</button> -->
 
 
@@ -36,9 +40,21 @@
     }
 
 
-    //our API call function - needs to be async/await
+    /*
+    our API call function - needs to be async/await. Async tells the interpreter that this function
+    may need to await a promise. Async does nothing without await, and vice versa. Await says that
+    the following function call may not return imedately. The event scheduler will ocasionally poll
+    the promise to see if it is fulfilled or rejected. The interpreter will execute other code outside
+    the async function while it waits. Code inside this function will not be executed until the
+    promise resolves.
+    
+    */
+
     async function apiCall() {
-        console.log("test!");
+        /*
+        Here we are setting up the two parameters to the fetch call. First, the URL to access.
+        Then, optionally, some options. GET is the assumed default method, but I've included it anyway.
+        */
         let url = `http://localhost:8080/simple-servlets/userInfo`
         let options = {
             method: "GET",
@@ -46,11 +62,15 @@
                 "Content-Type": "application/json"
             }
         }
-        console.log("Options: ", options);
 
-        let response = await fetch(url, options);
-        let json = response.json();
-        console.log("returned response from API: ", response);
+        /*
+        Here we the await keyword to indicate that the returned result from this funciton call will be wrapped
+        in a promise and may not resolve imedately. It will either suceed and be "fulfilled" (even if it is
+        fulfilled with an error) or it will time out and be rejected. Once fulfilled, the response object is
+        present and we can grab the response body json out of it.
+        */
+        let json = await fetch(url, options).json();
+        console.log("returned json from API: ", json);
         return json;
     }
 
@@ -63,7 +83,7 @@
 
 </script>
 
-<!-- You can pullin axios to use via a CDN or content delivery network. This one is basically just a .js file
+<!-- You can pull in axios to use via a CDN or content delivery network. This one is basically just a .js file
     that can be loaded remotely with no auth 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> 
 -->
