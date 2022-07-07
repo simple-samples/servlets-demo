@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View</title>
+</head>
+
+
+<body id="body">
+    <a href="www.google.com">google.com</a>
+    <h2>User information: </h2>
+    <!-- <button type="button" onclick="showInfo()">Click here!</button> -->
+
+
+</body>
+
+<script>
+    //This tells the browser to execute our function as soon as the page gets rendered.
+    window.onload = showInfo();
+
+    //here we define our showInfo() function, the function that will ultimately fetch the info from
+    //our backend and then insert it into the page
+    async function showInfo() {
+
+        let json = await apiCall();
+        //get the body element by ID and insert a new element, an unordered list with an id of "list"
+        document.getElementById("body").innerHTML += "<ul id=\"list\"></ul>";
+
+        //Now iterate through our JSON object adding the list items to the list.
+        for (let key in json) {
+            document.getElementById("list").innerHTML += "<li>[" + key + "]: " + json[key] + "</li>";
+        }
+    }
+
+
+    //our API call function - needs to be async/await
+    async function apiCall() {
+        console.log("test!");
+        let url = `http://localhost:8080/simple-servlets/userInfo`
+        let options = {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        console.log("Options: ", options);
+
+        let response = await fetch(url, options);
+        let json = response.json();
+        console.log("returned response from API: ", response);
+        return json;
+    }
+
+
+
+
+
+
+
+
+</script>
+
+<!-- You can pullin axios to use via a CDN or content delivery network. This one is basically just a .js file
+    that can be loaded remotely with no auth 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> 
+-->
+
+<!-- This is how you preform a similar operation using a library called Axios. 
+    async function axiosCall() {
+        axios.get("http://localhost:8080/simple-servlets/userInfo").then(function (response) {
+            console.log(response)
+        })
+    } 
+-->
+</html>
