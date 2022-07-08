@@ -1,10 +1,10 @@
-package servlets;
+package com.revature.servlets;
+
+import com.revature.ObjectStore;
+import com.revature.User;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 /*
@@ -23,12 +23,20 @@ public class UserInfo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Just testing out some HttpSession API stuff
-        HttpSession session = req.getSession();
-        Object test = session.getAttribute("test");
-        if (test == null) {
-            System.out.println("attribute is null.");
-            session.setAttribute("test", "test");
-        }
+//        HttpSession session = req.getSession();
+//        Object test = session.getAttribute("test");
+//        if (test == null) {
+//            System.out.println("attribute is null.");
+//            session.setAttribute("test", "test");
+//        }
+
+
+        //let's create a cookie for session management:
+        Cookie userCookie = new Cookie("user", "Kyle");
+        resp.addCookie(userCookie);
+
+        Cookie testCookie = new Cookie("test", "Test");
+        resp.addCookie(testCookie);
 
 
         resp.setStatus(200);
@@ -41,5 +49,20 @@ public class UserInfo extends HttpServlet {
                                 "\"age\": 37 " +
                                 "}"
                             );
+    }
+
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String firstName = req.getParameter("first-name");
+        String lastName = req.getParameter("last-name");
+        Integer age = Integer.parseInt(req.getParameter("age"));
+
+        User user = new User(firstName, lastName, age);
+
+        ObjectStore.add("user", user);
+
+        resp.setStatus(201);
+        resp.getWriter().write(ObjectStore.get("user").toString());
     }
 }

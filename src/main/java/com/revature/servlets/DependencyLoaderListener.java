@@ -1,4 +1,4 @@
-package servlets;
+package com.revature.servlets;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
