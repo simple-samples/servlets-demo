@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- This HTML document is a simple demo page to showcase using an HTML form to POST data to our API -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>store-user</title>
+</head>
+
+<body>
+
+    <h2>Store User</h2>
+    <hr>
+    <form action="http://localhost:8080/simple-servlets/userInfo" method="POST" target="_blank">
+        <label for="first-name">First name: </label><br>
+        <input type="text" name="first-name" /><br><br>
+        <label for="last-name">Last name: </label><br>
+        <input type="text" name="last-name" /><br><br>
+        <label for="age"> Age: </label><br>
+        <input type="number" name="age" /><br><br>
+        <input type="submit" value="Submit!" />
+        <input type="reset" value="Reset!" />
+    </form>
+
+</body>
+
+
+</html>

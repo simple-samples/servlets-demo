@@ -6,6 +6,8 @@ import com.revature.User;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.lang.reflect.Parameter;
+import java.util.Enumeration;
 
 /*
 This servlet class responds to requests to the /login endpoint. This isn't very RESTFul, but demonstrates what we
@@ -22,33 +24,49 @@ public class UserInfo extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Just testing out some HttpSession API stuff
-//        HttpSession session = req.getSession();
-//        Object test = session.getAttribute("test");
-//        if (test == null) {
-//            System.out.println("attribute is null.");
-//            session.setAttribute("test", "test");
-//        }
 
 
-        //let's create a cookie for session management:
-        Cookie userCookie = new Cookie("user", "Kyle");
-        resp.addCookie(userCookie);
+        String firstName = req.getParameter("first-name");
+        Enumeration<String> parameters = req.getParameterNames();
+        boolean paramFound = false;
+        while(parameters.hasMoreElements()) {
+            String param = parameters.nextElement();
+            System.out.println("Paremeter search: " + param.toString());
+            if(param.equals("first-name")) {
+                System.out.println("Parameter found!");
+                paramFound = true;
+            }
+        }
 
-        Cookie testCookie = new Cookie("test", "Test");
-        resp.addCookie(testCookie);
+        User user = null;
 
+        if(paramFound) {
+            user = (User) ObjectStore.get(firstName);
+        } else {
+            System.out.println("Parameter not found, initiating cookie search...");
+            Cookie[] cookies = req.getCookies();
+            System.out.println(cookies.length + " cookies found");
+            for(Cookie cookie : cookies) {
+                System.out.println("Cookie search: " + cookie.getName() + " - " + cookie.getValue());
+                if(cookie.getName().equals("user-name")) {
+                    System.out.println("user-name cookie found! (" + cookie.getValue() + ").");
+                    user = (User) ObjectStore.get(cookie.getValue());
+                }
+            }
+        }
 
-        resp.setStatus(200);
-        /*
-        We prepare the body of our response with the following. Note that we are getting the writer that writes to the
-        response body, then invoke it's write() method with our string as the parameter.
-         */
-        resp.getWriter().write("{\"firstName\": \"Kyle\", " +
-                                "\"lastName\": \"Plummer\"," +
-                                "\"age\": 37 " +
-                                "}"
-                            );
+        if(user == null) {
+            resp.setStatus(404);
+            resp.getWriter().write("User not found");
+        } else {
+            resp.setStatus(200);
+            /*
+            We prepare the body of our response with the following. Note that we are getting the writer that writes to the
+            response body, then invoke it's write() method with our string as the parameter.
+             */
+            resp.getWriter().write(user.toString());
+        }
+
     }
 
 
@@ -58,11 +76,18 @@ public class UserInfo extends HttpServlet {
         String lastName = req.getParameter("last-name");
         Integer age = Integer.parseInt(req.getParameter("age"));
 
+        //let's create a cookie for session management:
+        Cookie userCookie = new Cookie("user-name", firstName);
+        resp.addCookie(userCookie);
+
+//        Cookie testCookie = new Cookie("test", "Test");
+//        resp.addCookie(testCookie);
+
         User user = new User(firstName, lastName, age);
 
-        ObjectStore.add("user", user);
+        ObjectStore.add(firstName, user);
 
         resp.setStatus(201);
-        resp.getWriter().write(ObjectStore.get("user").toString());
+        resp.getWriter().write(ObjectStore.get(firstName).toString());
     }
 }

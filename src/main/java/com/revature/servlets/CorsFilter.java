@@ -1,6 +1,7 @@
 package com.revature.servlets;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -44,6 +45,8 @@ public class CorsFilter implements Filter {
         ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods","*");
         // Authorize (allow) all headers on the request
         ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers","*");
+        //authorize use of cookies
+        //((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Credentials","true");
 
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
