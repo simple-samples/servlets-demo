@@ -18,7 +18,8 @@ requests that tells the servlet method how to proceed. Something like "mode"="re
  */
 
 
-//This is the cookie version of the demo
+//This is the localStorage version of the demo
+
 public class UserInfo extends HttpServlet {
 
     /*
