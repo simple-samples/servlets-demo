@@ -4,6 +4,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /*
@@ -21,6 +22,15 @@ public class UserInfo extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //Just testing out some HttpSession API stuff
+        HttpSession session = req.getSession();
+        Object test = session.getAttribute("test");
+        if (test == null) {
+            System.out.println("attribute is null.");
+            session.setAttribute("test", "test");
+        }
+
+
         resp.setStatus(200);
         /*
         We prepare the body of our response with the following. Note that we are getting the writer that writes to the

@@ -4,6 +4,7 @@
     This HTML document is a simple demo page showcasing the use of fetch API to retrieve data from our API. 
     (Note the double use of "API" in that last sentence. Lots of things are APIs, not just web servers.)
   -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +17,7 @@
     <a href="www.google.com">google.com</a>
     <h2>User information: </h2>
     <!-- You can invoke javascript functions by clicking a button, see below: -->
-    <!-- <button type="button" onclick="showInfo()">Click here!</button> -->
+    <button type="button" onclick="showInfo()">Click here!</button>
 
 
 </body>
@@ -69,7 +70,8 @@
         fulfilled with an error) or it will time out and be rejected. Once fulfilled, the response object is
         present and we can grab the response body json out of it.
         */
-        let json = await fetch(url, options).json();
+        let result = await fetch(url, options);
+        let json = result.json();
         console.log("returned json from API: ", json);
         return json;
     }
@@ -95,4 +97,5 @@
         })
     } 
 -->
+
 </html>
