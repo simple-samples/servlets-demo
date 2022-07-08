@@ -16,6 +16,9 @@ we might have /users. A POST to /users would create a new individual user, a GET
 one individual identified as part of the request. The way Kyle likes to write a login is to have a header on POST
 requests that tells the servlet method how to proceed. Something like "mode"="register" and "mode"="login"
  */
+
+
+//This is the cookie version of the demo
 public class UserInfo extends HttpServlet {
 
     /*
