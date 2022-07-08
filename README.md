@@ -1,5 +1,5 @@
 # servlets-demo
- - See the simple-servlets lab (here)[https://github.com/simple-samples/simple-servlets]
+ - See the simple-servlets lab [here](https://github.com/simple-samples/simple-servlets)
  - see the notes (here)[https://github.com/220328-Java-Full-Stack-AWS/Curriculum-Notes/tree/main/notes]
 
 
