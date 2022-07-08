@@ -15,10 +15,11 @@
 
 <body id="body">
     <a href="www.google.com">google.com</a>
-    <h2>com.revature.User information: </h2>
+    <h2>User information: </h2>
     <!-- You can invoke javascript functions by clicking a button, see below: -->
     <button type="button" onclick="showInfoCookie()">Cookie</button>
     <button type="button" onclick="showInfoParam()">Parameter</button>
+    <button type="button" onclick="showInfoStore()">LocalStorage</button>
 
 
 </body>
@@ -30,19 +31,21 @@
     //here we define our showInfo() function, the function that will ultimately fetch the info from
     //our backend and then insert it into the page
     async function showInfoParam() {
-
         let json = await apiCall("PARAM");
-        //get the body element by ID and insert a new element, an unordered list with an id of "list"
-        document.getElementById("body").innerHTML += "<ul id=\"list\"></ul>";
-
-        //Now iterate through our JSON object adding the list items to the list.
-        for (let key in json) {
-            document.getElementById("list").innerHTML += "<li>[" + key + "]: " + json[key] + "</li>";
-        }
+        updatePage(json);
     }
 
     async function showInfoCookie() {
         let json = await apiCall("COOKIE");
+        updatePage(json);
+    }
+
+    async function showInfoStore() {
+        let json = await apiCall("LOCALSTORE");
+        updatePage(json);
+    }
+
+    function updatePage(json) {
         //get the body element by ID and insert a new element, an unordered list with an id of "list"
         document.getElementById("body").innerHTML += "<ul id=\"list\"></ul>";
 
@@ -75,7 +78,7 @@
                     "Content-Type": "application/json"
                 }
             }
-        } else {
+        } else if (mode == "COOKIE") {
             //operate in cookie mode, there should be a cookie present with the neccesary info
             /*
            Here we are setting up the two parameters to the fetch call. First, the URL to access.
@@ -84,12 +87,28 @@
             url = `http://localhost:8080/simple-servlets/userInfo`
             options = {
                 method: "GET",
-                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 }
             }
+        } else if (mode == "LOCALSTORE") {
+            //operate in cookie mode, there should be a cookie present with the neccesary info
+            /*
+           Here we are setting up the two parameters to the fetch call. First, the URL to access.
+           Then, optionally, some options. GET is the assumed default method, but I've included it anyway.
+           */
+            let authToken = localStorage.getItem("authToken");
+            console.log("authToken value: ", authToken);
+            url = `http://localhost:8080/simple-servlets/userInfo`
+            options = {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "first-name": authToken
+                }
+            }
         }
+
 
 
 

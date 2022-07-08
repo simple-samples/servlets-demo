@@ -30,38 +30,14 @@ public class UserInfo extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        String firstName = req.getParameter("first-name");
-        Enumeration<String> parameters = req.getParameterNames();
-        boolean paramFound = false;
-        while(parameters.hasMoreElements()) {
-            String param = parameters.nextElement();
-            System.out.println("Paremeter search: " + param.toString());
-            if(param.equals("first-name")) {
-                System.out.println("Parameter found!");
-                paramFound = true;
-            }
-        }
+        String firstName = req.getHeader("first-name");
 
-        User user = null;
+        User user = (User)ObjectStore.get(firstName);
 
-        if(paramFound) {
-            user = (User) ObjectStore.get(firstName);
-        } else {
-            System.out.println("Parameter not found, initiating cookie search...");
-            Cookie[] cookies = req.getCookies();
-            System.out.println(cookies.length + " cookies found");
-            for(Cookie cookie : cookies) {
-                System.out.println("Cookie search: " + cookie.getName() + " - " + cookie.getValue());
-                if(cookie.getName().equals("user-name")) {
-                    System.out.println("user-name cookie found! (" + cookie.getValue() + ").");
-                    user = (User) ObjectStore.get(cookie.getValue());
-                }
-            }
-        }
 
         if(user == null) {
             resp.setStatus(404);
-            resp.getWriter().write("User not found");
+            resp.getWriter().write("{ \"result\":\"User not found\"}");
         } else {
             resp.setStatus(200);
             /*
@@ -80,18 +56,14 @@ public class UserInfo extends HttpServlet {
         String lastName = req.getParameter("last-name");
         Integer age = Integer.parseInt(req.getParameter("age"));
 
-        //let's create a cookie for session management:
-        Cookie userCookie = new Cookie("user-name", firstName);
-        resp.addCookie(userCookie);
-
-//        Cookie testCookie = new Cookie("test", "Test");
-//        resp.addCookie(testCookie);
-
         User user = new User(firstName, lastName, age);
 
         ObjectStore.add(firstName, user);
 
         resp.setStatus(201);
+        //Instead of sending a cookie back, we'll send back a simple header with an ID
+        resp.setHeader("access-control-expose-headers", "authToken");
+        resp.setHeader("authToken", firstName);
         resp.getWriter().write(ObjectStore.get(firstName).toString());
     }
 }

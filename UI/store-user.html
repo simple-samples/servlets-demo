@@ -13,18 +13,49 @@
 
     <h2>Store User</h2>
     <hr>
-    <form action="http://localhost:8080/simple-servlets/userInfo" method="POST" target="_blank">
-        <label for="first-name">First name: </label><br>
-        <input type="text" name="first-name" /><br><br>
-        <label for="last-name">Last name: </label><br>
-        <input type="text" name="last-name" /><br><br>
-        <label for="age"> Age: </label><br>
-        <input type="number" name="age" /><br><br>
-        <input type="submit" value="Submit!" />
-        <input type="reset" value="Reset!" />
-    </form>
+    <!-- <form action="http://localhost:8080/simple-servlets/userInfo" method="POST" target="_blank"> -->
+    <label for="first-name">First name: </label><br>
+    <input id="first-name" type="text" name="first-name" /><br><br>
+    <label for="last-name">Last name: </label><br>
+    <input id="last-name" type="text" name="last-name" /><br><br>
+    <label for="age"> Age: </label><br>
+    <input id="age" type="number" name="age" /><br><br>
+    <button id="submitButton" onclick="submit()">Submit!</button>
 
 </body>
+
+<script>
+    async function submit() {
+        let firstNameValue = document.getElementById("first-name").value;
+        let lastNameValue = document.getElementById("last-name").value;
+        let ageValue = document.getElementById("age").value;
+
+        let url = `http://localhost:8080/simple-servlets/userInfo?first-name=` +
+            firstNameValue + `&last-name=` + lastNameValue + "&age=" + ageValue
+        let options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+
+        /////////////////////////////////////
+        //console.log("url: ", url);
+        /////////////////////////////////////
+
+
+        let response = await fetch(url, options);
+        if (response.status == 201) {
+            console.log("headers: ", response.headers);
+            let authToken = response.headers.get("authToken");
+            console.log("authToken received: ", authToken);
+            localStorage.setItem("authToken", authToken);
+        }
+    }
+
+
+
+</script>
 
 
 </html>
